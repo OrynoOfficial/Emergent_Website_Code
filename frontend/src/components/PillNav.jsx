@@ -264,12 +264,7 @@ const PillNav = () => {
               </button>
             </div>
 
-            {/* Auth Buttons - Mobile */}
-            <button
-              onClick={handleLoginClick}
-              className="w-full text-center text-[#082c59] border border-[#082c59] text-xs font-medium mt-1.5 px-3 py-1.5 sm:px-5 sm:py-2.5 rounded-full hover:bg-gray-50 transition-colors">
-              Login
-            </button>
+            {/* Get Started Button - Mobile */}
             <button
               onClick={handleRegisterClick}
               className="flex items-center justify-center gap-2 bg-[#082c59] text-white text-center text-xs font-medium mt-1.5 sm:mt-2 px-3 py-1.5 sm:px-5 sm:py-2.5 rounded-full hover:bg-[#0a3d7a] transition-colors shadow-lg">
