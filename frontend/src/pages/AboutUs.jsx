@@ -86,7 +86,7 @@ export default function AboutUs() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-3xl font-bold text-gray-900 mb-4">Join Our Team</h2>
           <p className="text-gray-600 max-w-2xl mx-auto mb-8">
-            We're always looking for talented individuals who share our passion for innovation and customer service.
+            We&apos;re always looking for talented individuals who share our passion for innovation and customer service.
           </p>
           <Button
             onClick={() => window.location.href = '/careers'}
