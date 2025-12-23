@@ -67,7 +67,7 @@ export default function Careers() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <div className="inline-flex items-center gap-2 bg-white/10 rounded-full px-4 py-1.5 text-xs font-semibold text-white mb-4">
             <Briefcase className="w-4 h-4" />
-            We're Hiring!
+            We&apos;re Hiring!
           </div>
           <h1 className="text-4xl sm:text-5xl font-bold text-white mb-4">
             Join the Oryno Team
