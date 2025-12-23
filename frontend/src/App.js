@@ -14,6 +14,7 @@ import CareersApplication from '@/pages/CareersApplication';
 import Blog from '@/pages/Blog';
 import Legal from '@/pages/Legal';
 import TestimonialsPage from '@/pages/TestimonialsPage';
+import Departments from '@/pages/Departments';
 
 // Admin Pages
 import AdminLayout from '@/pages/admin/AdminLayout';
@@ -52,6 +53,7 @@ function App() {
             <Route path="/blog" element={<Blog />} />
             <Route path="/legal" element={<Legal />} />
             <Route path="/testimonials" element={<TestimonialsPage />} />
+            <Route path="/departments" element={<Departments />} />
             
             {/* Admin Routes */}
             <Route path="/admin" element={<AdminLayout />}>
