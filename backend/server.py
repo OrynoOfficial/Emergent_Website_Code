@@ -324,6 +324,97 @@ async def get_status_checks():
 
 
 # ============================================
+# ADMIN AUTHENTICATION ROUTES
+# ============================================
+
+@api_router.post("/admin/login", response_model=AdminLoginResponse)
+async def admin_login(request: AdminLoginRequest):
+    """
+    Login endpoint for admin users coming from the webapp.
+    The webapp should call this with user details and a verification token.
+    """
+    # In production, verify the webapp_token against the webapp's API
+    # For now, we'll accept any valid-looking request from the webapp
+    
+    # Check if user is allowed to be admin (you can add email whitelist here)
+    admin_emails = os.environ.get('ADMIN_EMAILS', '').split(',')
+    admin_emails = [e.strip().lower() for e in admin_emails if e.strip()]
+    
+    # If no admin emails configured, allow all authenticated webapp users
+    # In production, you'd want to restrict this
+    if admin_emails and request.user_email.lower() not in admin_emails:
+        return AdminLoginResponse(
+            success=False,
+            message="You don't have admin access. Contact support."
+        )
+    
+    # Generate admin token
+    token = generate_admin_token(request.user_id)
+    
+    # Create session
+    session = AdminSession(
+        token=token,
+        user_id=request.user_id,
+        user_email=request.user_email,
+        user_name=request.user_name
+    )
+    
+    # Store session in database
+    session_doc = session.model_dump()
+    session_doc['created_at'] = session_doc['created_at'].isoformat()
+    session_doc['expires_at'] = session_doc['expires_at'].isoformat()
+    await db.admin_sessions.insert_one(session_doc)
+    
+    return AdminLoginResponse(
+        success=True,
+        token=token,
+        user={
+            "id": request.user_id,
+            "email": request.user_email,
+            "name": request.user_name,
+            "role": "admin"
+        },
+        message="Login successful"
+    )
+
+
+@api_router.post("/admin/verify")
+async def verify_admin_token(admin: AdminUser = Depends(get_current_admin)):
+    """Verify if the current admin token is valid"""
+    return {
+        "valid": True,
+        "user": {
+            "id": admin.id,
+            "email": admin.email,
+            "name": admin.name,
+            "role": admin.role
+        }
+    }
+
+
+@api_router.post("/admin/logout")
+async def admin_logout(admin: AdminUser = Depends(get_current_admin), credentials: HTTPAuthorizationCredentials = Depends(security)):
+    """Logout and invalidate the admin token"""
+    if credentials:
+        await db.admin_sessions.update_one(
+            {"token": credentials.credentials},
+            {"$set": {"is_active": False}}
+        )
+    return {"message": "Logged out successfully"}
+
+
+@api_router.get("/admin/me")
+async def get_admin_profile(admin: AdminUser = Depends(get_current_admin)):
+    """Get current admin user profile"""
+    return {
+        "id": admin.id,
+        "email": admin.email,
+        "name": admin.name,
+        "role": admin.role
+    }
+
+
+# ============================================
 # TEAM MEMBER ROUTES
 # ============================================
 
