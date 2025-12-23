@@ -34,9 +34,9 @@ export default function Legal() {
             <div className="prose prose-gray max-w-none">
               <p className="text-gray-600 mb-4">Last updated: January 1, 2025</p>
               <h3 className="text-lg font-semibold text-gray-900 mt-6 mb-3">1. Acceptance of Terms</h3>
-              <p className="text-gray-600 mb-4">By accessing and using Oryno's services, you agree to be bound by these Terms of Service. If you do not agree to these terms, please do not use our services.</p>
+              <p className="text-gray-600 mb-4">By accessing and using Oryno&apos;s services, you agree to be bound by these Terms of Service. If you do not agree to these terms, please do not use our services.</p>
               <h3 className="text-lg font-semibold text-gray-900 mt-6 mb-3">2. Use of Services</h3>
-              <p className="text-gray-600 mb-4">You agree to use Oryno's services only for lawful purposes and in accordance with these Terms. You are responsible for maintaining the confidentiality of your account credentials.</p>
+              <p className="text-gray-600 mb-4">You agree to use Oryno&apos;s services only for lawful purposes and in accordance with these Terms. You are responsible for maintaining the confidentiality of your account credentials.</p>
               <h3 className="text-lg font-semibold text-gray-900 mt-6 mb-3">3. Bookings and Payments</h3>
               <p className="text-gray-600 mb-4">All bookings made through Oryno are subject to availability and confirmation. Prices are displayed in Central African CFA Franc (XAF) and include applicable taxes unless otherwise stated.</p>
               <h3 className="text-lg font-semibold text-gray-900 mt-6 mb-3">4. Limitation of Liability</h3>
