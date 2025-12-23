@@ -21,6 +21,7 @@ import AdminLayout from '@/pages/admin/AdminLayout';
 import AdminDashboard from '@/pages/admin/AdminDashboard';
 import ContentManager from '@/pages/admin/ContentManager';
 import BlogManager from '@/pages/admin/BlogManager';
+import TeamManager from '@/pages/admin/TeamManager';
 import ApplicationsManager from '@/pages/admin/ApplicationsManager';
 import AdminSettings from '@/pages/admin/AdminSettings';
 
