@@ -195,21 +195,7 @@ const PillNav = () => {
             )}
           </div>
 
-          {/* Login Button */}
-          <button
-            onClick={handleLoginClick}
-            data-testid="login-btn"
-            className={`
-              flex items-center gap-2 text-[10px] sm:text-xs font-medium px-3 py-1.5 sm:px-4 sm:py-2.5 rounded-full 
-              transition-all duration-200 border
-              ${scrolled ?
-                'bg-gray-100 text-[#082c59] border-gray-200 hover:bg-gray-200' :
-                'bg-white/10 text-white border-white/20 hover:bg-white/20'}
-            `}>
-            Login
-          </button>
-
-          {/* Register/Portal Button */}
+          {/* Get Started Button - Points to webapp auth */}
           <button
             onClick={handleRegisterClick}
             data-testid="register-btn"
