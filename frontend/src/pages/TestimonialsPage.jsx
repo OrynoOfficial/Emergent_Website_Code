@@ -73,7 +73,7 @@ export default function TestimonialsPage() {
                     ))}
                   </div>
                   
-                  <p className="text-gray-700 mb-4">"{testimonial.comment}"</p>
+                  <p className="text-gray-700 mb-4">&ldquo;{testimonial.comment}&rdquo;</p>
                   
                   <div className="flex items-center gap-3">
                     <div className="w-10 h-10 bg-gradient-to-br from-[#082c59] to-[#0a3d7a] rounded-full flex items-center justify-center">
