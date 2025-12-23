@@ -75,8 +75,15 @@ export default function FeaturedPackages() {
         {/* Packages Grid */}
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
           {packages.map((pkg, index) => {
-            const Icon = packageTypeIcons[pkg.package_type] || Plane;
-            const colorClass = packageTypeColors[pkg.package_type] || 'from-gray-500 to-gray-600';
+            // Handle both API format and fallback format
+            const packageType = pkg.package_type || 'travel';
+            const Icon = packageTypeIcons[packageType] || Plane;
+            const colorClass = packageTypeColors[packageType] || 'from-gray-500 to-gray-600';
+            const destination = pkg.destination || pkg.name || '';
+            const duration = pkg.duration_days || pkg.duration || '';
+            const price = pkg.base_price || pkg.price || 0;
+            const rating = pkg.rating || 4.5;
+            const includes = pkg.includes || [];
             
             return (
               <motion.div
@@ -88,43 +95,78 @@ export default function FeaturedPackages() {
                 className="group relative bg-white rounded-2xl shadow-lg overflow-hidden border border-gray-100 hover:shadow-2xl transition-all duration-500 hover:-translate-y-2"
               >
                 {/* Image/Header */}
-                <div className={`relative h-48 bg-gradient-to-br ${colorClass} p-6 flex flex-col justify-between`}>
-                  <div className="flex justify-between items-start">
-                    <div className="bg-white/20 backdrop-blur-sm rounded-full px-3 py-1 text-white text-xs font-semibold capitalize">
-                      {pkg.package_type}
-                    </div>
-                    <div className="flex items-center gap-1 bg-white/20 backdrop-blur-sm rounded-full px-2 py-1">
-                      <Star className="w-3 h-3 fill-yellow-300 text-yellow-300" />
-                      <span className="text-white text-xs font-semibold">{pkg.rating?.toFixed(1) || '4.5'}</span>
-                    </div>
-                  </div>
+                <div className={`relative h-48 overflow-hidden`}>
+                  {pkg.image ? (
+                    <>
+                      <img 
+                        src={pkg.image} 
+                        alt={pkg.name} 
+                        className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                      />
+                      <div className={`absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent`} />
+                    </>
+                  ) : (
+                    <div className={`absolute inset-0 bg-gradient-to-br ${colorClass}`} />
+                  )}
                   
-                  <div className="text-center">
-                    <div className="w-16 h-16 mx-auto bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center mb-3">
-                      <Icon className="w-8 h-8 text-white" />
+                  <div className="absolute inset-0 p-6 flex flex-col justify-between">
+                    <div className="flex justify-between items-start">
+                      <div className="bg-white/20 backdrop-blur-sm rounded-full px-3 py-1 text-white text-xs font-semibold capitalize">
+                        {packageType}
+                      </div>
+                      <div className="flex items-center gap-1 bg-white/20 backdrop-blur-sm rounded-full px-2 py-1">
+                        <Star className="w-3 h-3 fill-yellow-300 text-yellow-300" />
+                        <span className="text-white text-xs font-semibold">{typeof rating === 'number' ? rating.toFixed(1) : rating}</span>
+                      </div>
                     </div>
-                    <h3 className="text-xl font-bold text-white">{pkg.name}</h3>
+                    
+                    <div className="text-center">
+                      {!pkg.image && (
+                        <div className="w-16 h-16 mx-auto bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center mb-3">
+                          <Icon className="w-8 h-8 text-white" />
+                        </div>
+                      )}
+                      <h3 className="text-xl font-bold text-white drop-shadow-lg">{pkg.name}</h3>
+                    </div>
                   </div>
                 </div>
 
                 {/* Content */}
                 <div className="p-5">
+                  {pkg.description && (
+                    <p className="text-gray-600 text-sm mb-3 line-clamp-2">{pkg.description}</p>
+                  )}
+                  
                   <div className="flex items-center justify-between mb-4">
-                    <div className="flex items-center gap-2 text-gray-600">
-                      <MapPin className="w-4 h-4" />
-                      <span className="text-sm">{pkg.destination}</span>
-                    </div>
-                    <div className="flex items-center gap-2 text-gray-600">
-                      <Clock className="w-4 h-4" />
-                      <span className="text-sm">{pkg.duration_days} days</span>
-                    </div>
+                    {destination && (
+                      <div className="flex items-center gap-2 text-gray-600">
+                        <MapPin className="w-4 h-4" />
+                        <span className="text-sm">{destination}</span>
+                      </div>
+                    )}
+                    {duration && (
+                      <div className="flex items-center gap-2 text-gray-600">
+                        <Clock className="w-4 h-4" />
+                        <span className="text-sm">{duration}</span>
+                      </div>
+                    )}
                   </div>
+                  
+                  {includes.length > 0 && (
+                    <div className="flex flex-wrap gap-1 mb-4">
+                      {includes.slice(0, 3).map((item, idx) => (
+                        <span key={idx} className="text-xs bg-gray-100 text-gray-600 px-2 py-1 rounded-full">
+                          {item}
+                        </span>
+                      ))}
+                    </div>
+                  )}
 
                   <div className="flex items-center justify-between">
                     <div>
                       <span className="text-xs text-gray-500">Starting from</span>
                       <div className="text-2xl font-bold text-[#082c59]">
-                        {formatCurrency(pkg.base_price)}
+                        {formatCurrency(price)}
                       </div>
                     </div>
                     <Button
