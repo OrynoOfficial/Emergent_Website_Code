@@ -74,10 +74,10 @@ export default function ChatbotWidget() {
 
   return (
     <>
-      {/* Chat Button */}
+      {/* Chat Button - Positioned to avoid platform evaluation badge */}
       <motion.button
         onClick={() => setIsOpen(!isOpen)}
-        className={`fixed bottom-6 right-6 z-50 w-14 h-14 rounded-full shadow-2xl flex items-center justify-center transition-colors ${
+        className={`fixed bottom-24 right-6 z-50 w-14 h-14 rounded-full shadow-2xl flex items-center justify-center transition-colors ${
           isOpen ? 'bg-gray-700' : 'bg-[#082c59]'
         } text-white hover:scale-110 transform`}
         whileHover={{ scale: 1.1 }}
@@ -94,7 +94,7 @@ export default function ChatbotWidget() {
             initial={{ opacity: 0, y: 20, scale: 0.95 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 20, scale: 0.95 }}
-            className="fixed bottom-24 right-6 z-50 w-80 sm:w-96 bg-white rounded-2xl shadow-2xl border border-gray-200 overflow-hidden"
+            className="fixed bottom-40 right-6 z-50 w-80 sm:w-96 bg-white rounded-2xl shadow-2xl border border-gray-200 overflow-hidden"
           >
             {/* Header */}
             <div className="bg-[#082c59] text-white p-4">
