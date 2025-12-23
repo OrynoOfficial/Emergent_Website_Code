@@ -114,7 +114,7 @@ export default function ShipmentAnalyticsChart({ showAll = false }) {
                   <Legend 
                     verticalAlign="bottom" 
                     height={36}
-                    formatter={(value) => <span className="text-xs text-gray-600">{value}</span>}
+                    formatter={legendFormatter}
                   />
                 </PieChart>
               </ResponsiveContainer>
