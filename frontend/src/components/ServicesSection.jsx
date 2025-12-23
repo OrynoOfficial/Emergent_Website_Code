@@ -154,25 +154,6 @@ export default function ServicesSection() {
     );
   }
 
-  const ServiceCard = ({ service }) => {
-    const Icon = service.IconComponent;
-    return (
-      <div className="bg-white p-6 rounded-2xl shadow-lg border border-gray-100 hover:shadow-xl transition-all hover:scale-105 duration-300 h-full">
-        <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${service.colorClass} flex items-center justify-center mb-4 shadow-lg`}>
-          <Icon className="w-6 h-6 text-white" />
-        </div>
-        <h3 className="text-lg font-bold text-gray-900 mb-2">{service.name}</h3>
-        <p className="text-gray-600 text-sm mb-4">{service.description}</p>
-        <button
-          onClick={handleExploreService}
-          className="text-[#082c59] font-semibold text-sm flex items-center gap-1 hover:gap-2 transition-all"
-        >
-          Explore <ArrowRight className="w-4 h-4" />
-        </button>
-      </div>
-    );
-  };
-
   return (
     <div id="services" className="bg-slate-100 py-12 sm:py-24 lg:py-32 scroll-mt-24">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
