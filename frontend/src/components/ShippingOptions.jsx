@@ -1,93 +1,81 @@
 import React from 'react';
-import { motion } from 'framer-motion';
-import { Truck, Plane, Ship, Package, Clock, Shield } from 'lucide-react';
+import Stack from './Stack';
+import { Button } from '@/components/ui/button';
+import { ArrowRight } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
-const shippingOptions = [
+// Static shipping/service images for the stack component
+const shippingImages = [
   {
-    icon: Truck,
-    title: 'Ground Shipping',
-    description: 'Reliable overland delivery across all major cities in Cameroon.',
-    features: ['Door-to-door delivery', 'Real-time tracking', '2-5 business days'],
-    color: 'from-blue-500 to-blue-600'
+    id: 1,
+    img: "https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?w=500&h=400&fit=crop"
   },
   {
-    icon: Plane,
-    title: 'Express Delivery',
-    description: 'Fast air freight for urgent packages and time-sensitive items.',
-    features: ['Same-day available', 'Priority handling', 'Insurance included'],
-    color: 'from-purple-500 to-purple-600'
+    id: 2,
+    img: "https://images.unsplash.com/photo-1553413077-190dd305871c?w=500&h=400&fit=crop"
   },
   {
-    icon: Ship,
-    title: 'International Shipping',
-    description: 'Global shipping solutions for businesses and individuals.',
-    features: ['Worldwide coverage', 'Customs support', 'Competitive rates'],
-    color: 'from-green-500 to-green-600'
+    id: 3,
+    img: "https://images.unsplash.com/photo-1601584115197-04ecc0da31d7?w=500&h=400&fit=crop"
+  },
+  {
+    id: 4,
+    img: "https://images.unsplash.com/photo-1519003722824-194d4455a60c?w=500&h=400&fit=crop"
+  },
+  {
+    id: 5,
+    img: "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=500&h=400&fit=crop"
   }
 ];
 
 export default function ShippingOptions() {
   return (
-    <div className="bg-white py-16 sm:py-24">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Header */}
-        <div className="text-center mb-12">
-          <div className="inline-flex items-center gap-2 bg-orange-100 rounded-full px-4 py-1.5 text-xs font-semibold text-orange-700 mb-4">
-            <Package className="w-4 h-4" />
-            Shipping Services
-          </div>
-          <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">
-            Reliable Package Delivery
+    <div className="bg-white py-16 sm:py-24 lg:py-32">
+      <div className="max-w-7xl mx-auto px-6 lg:px-8 text-center">
+        <div className="space-y-4 sm:space-y-6 mb-12 sm:mb-16">
+          <h2 className="text-xl sm:text-2xl lg:text-3xl font-medium text-gray-900">
+            Explore Our Premium Services
           </h2>
-          <p className="text-gray-600 max-w-2xl mx-auto">
-            Choose from our range of shipping options to get your packages delivered safely and on time
+          <p className="text-base sm:text-lg text-gray-500">
+            for <span className="text-gray-900">your daily needs</span>
+          </p>
+          <p className="text-gray-600 text-xs sm:text-sm max-w-2xl mx-auto">
+            Whether you need travel bookings, package delivery, restaurant reservations, or event planning, 
+            we offer a variety of reliable and efficient services to meet all your requirements.
           </p>
         </div>
 
-        {/* Options Grid */}
-        <div className="grid md:grid-cols-3 gap-6">
-          {shippingOptions.map((option, index) => (
-            <motion.div
-              key={option.title}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: index * 0.1 }}
-              className="bg-gray-50 rounded-2xl p-6 hover:shadow-xl transition-all duration-300 group"
-            >
-              <div className={`w-16 h-16 rounded-2xl bg-gradient-to-br ${option.color} flex items-center justify-center mb-6 shadow-lg group-hover:scale-110 transition-transform`}>
-                <option.icon className="w-8 h-8 text-white" />
-              </div>
-              
-              <h3 className="font-bold text-gray-900 text-xl mb-2">{option.title}</h3>
-              <p className="text-gray-600 text-sm mb-4">{option.description}</p>
-              
-              <ul className="space-y-2">
-                {option.features.map((feature, i) => (
-                  <li key={i} className="flex items-center gap-2 text-sm text-gray-600">
-                    <div className="w-1.5 h-1.5 rounded-full bg-[#082c59]"></div>
-                    {feature}
-                  </li>
-                ))}
-              </ul>
-            </motion.div>
-          ))}
+        {/* Interactive Stack Component */}
+        <div className="flex justify-center mb-12">
+          <div className="relative">
+            <Stack
+              randomRotation={true}
+              sensitivity={180}
+              sendToBackOnClick={true}
+              cardDimensions={{ width: 300, height: 200 }}
+              cardsData={shippingImages}
+            />
+            
+            {/* Service Label Overlay */}
+            <div className="absolute -bottom-4 left-1/2 transform -translate-x-1/2 bg-[#082c59] text-white px-4 py-2 rounded-lg shadow-lg">
+              <div className="text-xs text-blue-300 mb-1">Premium</div>
+              <div className="font-semibold">Oryno Services</div>
+            </div>
+          </div>
         </div>
 
-        {/* Trust Badges */}
-        <div className="mt-12 flex flex-wrap justify-center gap-6">
-          <div className="flex items-center gap-2 px-4 py-2 bg-gray-100 rounded-full">
-            <Clock className="w-5 h-5 text-[#082c59]" />
-            <span className="text-sm font-medium text-gray-700">On-Time Guarantee</span>
-          </div>
-          <div className="flex items-center gap-2 px-4 py-2 bg-gray-100 rounded-full">
-            <Shield className="w-5 h-5 text-[#082c59]" />
-            <span className="text-sm font-medium text-gray-700">Package Protection</span>
-          </div>
-          <div className="flex items-center gap-2 px-4 py-2 bg-gray-100 rounded-full">
-            <Package className="w-5 h-5 text-[#082c59]" />
-            <span className="text-sm font-medium text-gray-700">Track & Trace</span>
-          </div>
+        <div className="space-y-4 text-center max-w-md mx-auto mt-16">
+          <p className="text-gray-600 text-xs sm:text-sm">
+            Reliable and efficient service delivery across all platforms, 
+            ensuring convenience and timely fulfillment of your needs.
+          </p>
+          
+          <Link to="/blog">
+            <Button className="bg-[#082c59] hover:bg-[#0a3d7a] text-white font-semibold group text-xs sm:text-sm">
+              Read Our Blog
+              <ArrowRight className="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform" />
+            </Button>
+          </Link>
         </div>
       </div>
     </div>
