@@ -1,64 +1,67 @@
 import React, { useState } from 'react';
-import { motion } from 'framer-motion';
 
 export default function Stack({
-  items = [],
-  offset = 10,
-  scaleFactor = 0.06,
-  className = ''
+  randomRotation = false,
+  sensitivity = 200,
+  cardDimensions = { width: 208, height: 208 },
+  cardsData = [],
+  sendToBackOnClick = false
 }) {
-  const [cards, setCards] = useState(items);
+  const [cards, setCards] = useState(
+    cardsData.length
+      ? cardsData
+      : [
+          { id: 1, img: "https://images.unsplash.com/photo-1480074568708-e7b720bb3f09?q=80&w=500&auto=format" },
+          { id: 2, img: "https://images.unsplash.com/photo-1449844908441-8829872d2607?q=80&w=500&auto=format" },
+          { id: 3, img: "https://images.unsplash.com/photo-1452626212852-811d58933cae?q=80&w=500&auto=format" },
+          { id: 4, img: "https://images.unsplash.com/photo-1572120360610-d971b9d7767c?q=80&w=500&auto=format" }
+        ]
+  );
 
-  const moveToEnd = (index) => {
-    const newCards = [...cards];
-    const [removed] = newCards.splice(index, 1);
-    newCards.push(removed);
-    setCards(newCards);
+  const sendToBack = (id) => {
+    setCards((prev) => {
+      const newCards = [...prev];
+      const index = newCards.findIndex((card) => card.id === id);
+      const [card] = newCards.splice(index, 1);
+      newCards.unshift(card);
+      return newCards;
+    });
   };
 
   return (
-    <div className={`relative ${className}`} style={{ height: 300, width: 250 }}>
+    <div
+      className="relative cursor-pointer"
+      style={{
+        width: cardDimensions.width,
+        height: cardDimensions.height,
+        perspective: '600px',
+      }}
+    >
       {cards.map((card, index) => {
-        const isTop = index === 0;
-        
+        const randomRotate = randomRotation ? Math.random() * 10 - 5 : 0;
+        const rotation = (cards.length - index - 1) * 4 + randomRotate;
+        const scale = 1 + index * 0.06 - cards.length * 0.06;
+
         return (
-          <motion.div
-            key={card.id || index}
-            className="absolute w-full cursor-pointer"
+          <div
+            key={card.id}
+            className="absolute transition-all duration-300 ease-out hover:scale-105"
+            onClick={() => sendToBackOnClick && sendToBack(card.id)}
             style={{
-              transformOrigin: 'top center',
-              zIndex: cards.length - index
+              transform: `rotateZ(${rotation}deg) scale(${scale})`,
+              transformOrigin: '90% 90%',
+              width: cardDimensions.width,
+              height: cardDimensions.height,
             }}
-            initial={false}
-            animate={{
-              top: index * -offset,
-              scale: 1 - index * scaleFactor,
-              opacity: 1 - index * 0.1
-            }}
-            whileHover={isTop ? { scale: 1.05, y: -10 } : {}}
-            onClick={() => isTop && moveToEnd(0)}
-            transition={{ type: 'spring', stiffness: 300, damping: 20 }}
           >
-            <div className="bg-white rounded-2xl shadow-xl overflow-hidden border border-gray-100">
-              {card.image && (
-                <div className="h-40 overflow-hidden">
-                  <img 
-                    src={card.image} 
-                    alt={card.title || ''}
-                    className="w-full h-full object-cover"
-                  />
-                </div>
-              )}
-              <div className="p-4">
-                {card.title && (
-                  <h3 className="font-bold text-gray-900 mb-1">{card.title}</h3>
-                )}
-                {card.description && (
-                  <p className="text-gray-600 text-sm">{card.description}</p>
-                )}
-              </div>
+            <div className="rounded-2xl overflow-hidden border-4 border-white shadow-lg w-full h-full">
+              <img
+                src={card.img}
+                alt={`card-${card.id}`}
+                className="w-full h-full object-cover pointer-events-none"
+              />
             </div>
-          </motion.div>
+          </div>
         );
       })}
     </div>
