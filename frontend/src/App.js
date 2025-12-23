@@ -25,6 +25,10 @@ import TeamManager from '@/pages/admin/TeamManager';
 import ApplicationsManager from '@/pages/admin/ApplicationsManager';
 import AdminSettings from '@/pages/admin/AdminSettings';
 
+// Admin Auth
+import { AdminAuthProvider } from '@/api/adminAuth';
+import ProtectedAdminRoute from '@/components/ProtectedAdminRoute';
+
 // Create a client
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -36,6 +40,17 @@ const queryClient = new QueryClient({
     },
   },
 });
+
+// Wrapper component for admin routes with auth
+function AdminRoutes() {
+  return (
+    <AdminAuthProvider>
+      <ProtectedAdminRoute>
+        <AdminLayout />
+      </ProtectedAdminRoute>
+    </AdminAuthProvider>
+  );
+}
 
 function App() {
   return (
@@ -56,8 +71,8 @@ function App() {
             <Route path="/testimonials" element={<TestimonialsPage />} />
             <Route path="/departments" element={<Departments />} />
             
-            {/* Admin Routes */}
-            <Route path="/admin" element={<AdminLayout />}>
+            {/* Protected Admin Routes */}
+            <Route path="/admin/*" element={<AdminRoutes />}>
               <Route index element={<AdminDashboard />} />
               <Route path="content" element={<ContentManager />} />
               <Route path="team" element={<TeamManager />} />
