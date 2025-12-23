@@ -1,14 +1,18 @@
-from fastapi import FastAPI, APIRouter, HTTPException
+from fastapi import FastAPI, APIRouter, HTTPException, Depends, Header, UploadFile, File
+from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from dotenv import load_dotenv
 from starlette.middleware.cors import CORSMiddleware
 from motor.motor_asyncio import AsyncIOMotorClient
 import os
 import logging
+import secrets
+import hashlib
+import base64
 from pathlib import Path
 from pydantic import BaseModel, Field, ConfigDict
 from typing import List, Optional
 import uuid
-from datetime import datetime, timezone
+from datetime import datetime, timezone, timedelta
 
 
 ROOT_DIR = Path(__file__).parent
@@ -22,8 +26,107 @@ db = client[os.environ['DB_NAME']]
 # Create the main app without a prefix
 app = FastAPI()
 
-# Create a router with the /api prefix
+# Create routers
 api_router = APIRouter(prefix="/api")
+admin_router = APIRouter(prefix="/api/admin")
+
+# Security
+security = HTTPBearer(auto_error=False)
+
+# Admin secret key for token generation (in production, use env variable)
+ADMIN_SECRET_KEY = os.environ.get('ADMIN_SECRET_KEY', 'oryno-admin-secret-2024')
+
+
+# ============================================
+# ADMIN AUTHENTICATION
+# ============================================
+
+class AdminSession(BaseModel):
+    model_config = ConfigDict(extra="ignore")
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    token: str
+    user_id: str
+    user_email: str
+    user_name: str
+    role: str = "admin"
+    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+    expires_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc) + timedelta(hours=24))
+    is_active: bool = True
+
+class AdminLoginRequest(BaseModel):
+    user_id: str
+    user_email: str
+    user_name: str
+    webapp_token: str  # Token from the webapp to verify the user
+
+class AdminLoginResponse(BaseModel):
+    success: bool
+    token: Optional[str] = None
+    user: Optional[dict] = None
+    message: str
+
+class AdminUser(BaseModel):
+    id: str
+    email: str
+    name: str
+    role: str
+
+
+def generate_admin_token(user_id: str) -> str:
+    """Generate a secure admin token"""
+    random_bytes = secrets.token_bytes(32)
+    timestamp = str(datetime.now(timezone.utc).timestamp())
+    data = f"{user_id}:{timestamp}:{ADMIN_SECRET_KEY}"
+    hash_bytes = hashlib.sha256(data.encode()).digest()
+    token = base64.urlsafe_b64encode(random_bytes + hash_bytes).decode()
+    return token
+
+
+async def get_current_admin(credentials: HTTPAuthorizationCredentials = Depends(security)) -> AdminUser:
+    """Dependency to verify admin token and get current admin user"""
+    if not credentials:
+        raise HTTPException(status_code=401, detail="Not authenticated")
+    
+    token = credentials.credentials
+    
+    # Find active session with this token
+    session = await db.admin_sessions.find_one({
+        "token": token,
+        "is_active": True
+    }, {"_id": 0})
+    
+    if not session:
+        raise HTTPException(status_code=401, detail="Invalid or expired token")
+    
+    # Check if token is expired
+    expires_at = session.get('expires_at')
+    if isinstance(expires_at, str):
+        expires_at = datetime.fromisoformat(expires_at)
+    
+    if expires_at < datetime.now(timezone.utc):
+        # Deactivate expired session
+        await db.admin_sessions.update_one(
+            {"token": token},
+            {"$set": {"is_active": False}}
+        )
+        raise HTTPException(status_code=401, detail="Token expired")
+    
+    return AdminUser(
+        id=session['user_id'],
+        email=session['user_email'],
+        name=session['user_name'],
+        role=session.get('role', 'admin')
+    )
+
+
+async def optional_admin(credentials: HTTPAuthorizationCredentials = Depends(security)) -> Optional[AdminUser]:
+    """Optional admin authentication - returns None if not authenticated"""
+    if not credentials:
+        return None
+    try:
+        return await get_current_admin(credentials)
+    except HTTPException:
+        return None
 
 
 # ============================================
