@@ -1,4 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
+
+// Simple seeded random number generator to avoid impure function calls during render
+const seededRandom = (seed) => {
+  const x = Math.sin(seed) * 10000;
+  return x - Math.floor(x);
+};
 
 export default function Stack({
   randomRotation = false,
@@ -7,6 +13,13 @@ export default function Stack({
   cardsData = [],
   sendToBackOnClick = false
 }) {
+  // Pre-calculate random rotations using useMemo
+  const randomRotations = useMemo(() => {
+    return cardsData.map((_, index) => 
+      randomRotation ? seededRandom(index + 1) * 10 - 5 : 0
+    );
+  }, [cardsData, randomRotation]);
+
   const [cards, setCards] = useState(
     cardsData.length
       ? cardsData
