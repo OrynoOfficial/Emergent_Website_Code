@@ -24,6 +24,7 @@ import BlogManager from '@/pages/admin/BlogManager';
 import TeamManager from '@/pages/admin/TeamManager';
 import ApplicationsManager from '@/pages/admin/ApplicationsManager';
 import AdminSettings from '@/pages/admin/AdminSettings';
+import AdminLogin from '@/pages/admin/AdminLogin';
 
 // Admin Auth
 import { AdminAuthProvider } from '@/api/adminAuth';
