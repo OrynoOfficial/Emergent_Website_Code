@@ -10,6 +10,13 @@ import Testimonials from '@/components/Testimonials';
 import HelpBanner from '@/components/HelpBanner';
 import Footer from '@/components/Footer';
 import AnimatedSection from '@/components/AnimatedSection';
+import AboutSection from '@/components/AboutSection';
+import WhyChooseUs from '@/components/WhyChooseUs';
+import ClientLogos from '@/components/ClientLogos';
+import FaqSection from '@/components/FaqSection';
+import AnalyticsSection from '@/components/AnalyticsSection';
+import ContainerMessage from '@/components/ContainerMessage';
+import ChatbotWidget from '@/components/ChatbotWidget';
 
 export default function Home() {
   useEffect(() => {
@@ -50,6 +57,9 @@ export default function Home() {
         <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-black/40 to-transparent"></div>
       </div>
 
+      {/* Client Logos */}
+      <ClientLogos />
+
       {/* Stats Section - Platform Statistics */}
       <AnimatedSection>
         <StatsSection />
@@ -60,9 +70,19 @@ export default function Home() {
         <ServicesSection />
       </AnimatedSection>
 
+      {/* About Section */}
+      <AnimatedSection>
+        <AboutSection />
+      </AnimatedSection>
+
       {/* Featured Hotels */}
       <AnimatedSection>
         <FeaturedHotels />
+      </AnimatedSection>
+
+      {/* Why Choose Us */}
+      <AnimatedSection>
+        <WhyChooseUs />
       </AnimatedSection>
 
       {/* Featured Packages */}
@@ -70,14 +90,29 @@ export default function Home() {
         <FeaturedPackages />
       </AnimatedSection>
 
+      {/* Analytics Section */}
+      <AnimatedSection>
+        <AnalyticsSection />
+      </AnimatedSection>
+
       {/* Popular Routes */}
       <AnimatedSection>
         <PopularRoutes />
       </AnimatedSection>
 
+      {/* Container Message CTA */}
+      <AnimatedSection>
+        <ContainerMessage />
+      </AnimatedSection>
+
       {/* Testimonials */}
       <AnimatedSection>
         <Testimonials />
+      </AnimatedSection>
+
+      {/* FAQ Section */}
+      <AnimatedSection>
+        <FaqSection />
       </AnimatedSection>
 
       {/* Help Banner */}
@@ -87,6 +122,9 @@ export default function Home() {
 
       {/* Footer */}
       <Footer />
+
+      {/* Chatbot Widget */}
+      <ChatbotWidget />
     </main>
   );
 }
