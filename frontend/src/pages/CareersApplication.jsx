@@ -51,8 +51,8 @@ export default function CareersApplication() {
             </div>
             <h1 className="text-3xl font-bold text-gray-900 mb-4">Application Submitted!</h1>
             <p className="text-gray-600 mb-8">
-              Thank you for your interest in joining Oryno. We've received your application for {job.title} 
-              and will review it shortly. You'll hear from us within 5-7 business days.
+              Thank you for your interest in joining Oryno. We&apos;ve received your application for {job.title} 
+              and will review it shortly. You&apos;ll hear from us within 5-7 business days.
             </p>
             <Link to="/careers">
               <Button variant="outline">Back to Careers</Button>
