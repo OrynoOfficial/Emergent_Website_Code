@@ -59,76 +59,14 @@ export default function Home() {
         <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-black/40 to-transparent"></div>
       </div>
 
-      {/* Client Logos */}
-      <ClientLogos />
-
-      {/* Stats Section - Platform Statistics */}
-      <AnimatedSection>
-        <StatsSection />
-      </AnimatedSection>
-
-      {/* Services Section */}
-      <AnimatedSection>
-        <ServicesSection />
-      </AnimatedSection>
-
-      {/* Transport Modes */}
-      <AnimatedSection>
-        <TransportModes />
-      </AnimatedSection>
-
-      {/* Service Network */}
-      <AnimatedSection>
-        <section className="py-16 bg-white">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="text-center mb-10">
-              <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-3">
-                Our Service Network
-              </h2>
-              <p className="text-gray-600 max-w-2xl mx-auto">
-                Explore all the services connected through the Oryno platform
-              </p>
-            </div>
-            <OrynoServiceNetwork />
-          </div>
-        </section>
-      </AnimatedSection>
-
       {/* About Section */}
       <AnimatedSection>
         <AboutSection />
       </AnimatedSection>
 
-      {/* Featured Hotels */}
+      {/* Team Section */}
       <AnimatedSection>
-        <FeaturedHotels />
-      </AnimatedSection>
-
-      {/* Why Choose Us */}
-      <AnimatedSection>
-        <WhyChooseUs />
-      </AnimatedSection>
-
-      {/* Marketing Carousel */}
-      <AnimatedSection>
-        <section className="py-16 bg-gray-50">
-          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="text-center mb-10">
-              <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-3">
-                Discover Oryno
-              </h2>
-              <p className="text-gray-600 max-w-2xl mx-auto">
-                Experience the best of travel and logistics services
-              </p>
-            </div>
-            <OrynoMarketingCarousel />
-          </div>
-        </section>
-      </AnimatedSection>
-
-      {/* Featured Packages */}
-      <AnimatedSection>
-        <FeaturedPackages />
+        <TeamSection />
       </AnimatedSection>
 
       {/* Analytics Section */}
@@ -136,14 +74,32 @@ export default function Home() {
         <AnalyticsSection />
       </AnimatedSection>
 
-      {/* Popular Routes */}
+      {/* Why Choose Us */}
       <AnimatedSection>
-        <PopularRoutes />
+        <WhyChooseUs />
       </AnimatedSection>
+
+      {/* Client Logos */}
+      <ClientLogos />
 
       {/* Container Message CTA */}
       <AnimatedSection>
         <ContainerMessage />
+      </AnimatedSection>
+
+      {/* Shipping Options / Premium Services */}
+      <AnimatedSection>
+        <ShippingOptions />
+      </AnimatedSection>
+
+      {/* Services Section */}
+      <AnimatedSection>
+        <ServicesSection />
+      </AnimatedSection>
+
+      {/* Excellence Stats */}
+      <AnimatedSection>
+        <ExcellenceStats />
       </AnimatedSection>
 
       {/* Testimonials */}
