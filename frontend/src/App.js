@@ -72,6 +72,9 @@ function App() {
             <Route path="/testimonials" element={<TestimonialsPage />} />
             <Route path="/departments" element={<Departments />} />
             
+            {/* Admin Login - Public route */}
+            <Route path="/admin/login" element={<AdminLogin />} />
+            
             {/* Protected Admin Routes */}
             <Route path="/admin/*" element={<AdminRoutes />}>
               <Route index element={<AdminDashboard />} />
