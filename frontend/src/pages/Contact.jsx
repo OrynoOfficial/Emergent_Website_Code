@@ -58,8 +58,8 @@ export default function Contact() {
                 Get in Touch
               </h1>
               <p className="text-gray-600 mb-8">
-                Have questions about our services? We're here to help. 
-                Send us a message and we'll respond as soon as possible.
+                Have questions about our services? We&apos;re here to help. 
+                Send us a message and we&apos;ll respond as soon as possible.
               </p>
 
               {/* Contact Details */}
