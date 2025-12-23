@@ -2,6 +2,9 @@ import React from 'react';
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar, PieChart, Pie, Cell, Legend } from 'recharts';
 import { TrendingUp, Package, MapPin, Calendar } from 'lucide-react';
 
+// Custom legend formatter - defined outside component to avoid recreation
+const legendFormatter = (value) => <span className="text-xs text-gray-600">{value}</span>;
+
 const monthlyData = [
   { month: 'Jan', bookings: 1200, revenue: 45000 },
   { month: 'Feb', bookings: 1400, revenue: 52000 },
