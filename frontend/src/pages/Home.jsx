@@ -2,10 +2,6 @@ import React, { useEffect } from 'react';
 import PillNav from '@/components/PillNav';
 import HeroContent from '@/components/HeroContent';
 import ServicesSection from '@/components/ServicesSection';
-import StatsSection from '@/components/StatsSection';
-import FeaturedHotels from '@/components/FeaturedHotels';
-import FeaturedPackages from '@/components/FeaturedPackages';
-import PopularRoutes from '@/components/PopularRoutes';
 import Testimonials from '@/components/Testimonials';
 import HelpBanner from '@/components/HelpBanner';
 import Footer from '@/components/Footer';
@@ -20,6 +16,9 @@ import ChatbotWidget from '@/components/ChatbotWidget';
 import OrynoMarketingCarousel from '@/components/OrynoMarketingCarousel';
 import OrynoServiceNetwork from '@/components/OrynoServiceNetwork';
 import TransportModes from '@/components/TransportModes';
+import TeamSection from '@/components/TeamSection';
+import ExcellenceStats from '@/components/ExcellenceStats';
+import ShippingOptions from '@/components/ShippingOptions';
 
 export default function Home() {
   useEffect(() => {
