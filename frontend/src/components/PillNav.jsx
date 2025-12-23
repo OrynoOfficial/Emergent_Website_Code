@@ -5,10 +5,10 @@ import { Menu, X, Package, User, Globe } from 'lucide-react';
 import { WEBAPP_URLS } from '@/api/publicApi';
 
 const defaultNavItems = [
-  { label: 'Services', page_name: 'Hero', hash: '#services', order: 1 },
-  { label: 'Hotels', page_name: 'Hero', hash: '#hotels', order: 2 },
-  { label: 'Packages', page_name: 'Hero', hash: '#packages', order: 3 },
-  { label: 'Routes', page_name: 'Hero', hash: '#routes', order: 4 },
+  { label: 'Services', page_name: 'Services', hash: '', order: 1 },
+  { label: 'About', page_name: 'AboutUs', hash: '', order: 2 },
+  { label: 'Careers', page_name: 'Careers', hash: '', order: 3 },
+  { label: 'Blog', page_name: 'Blog', hash: '', order: 4 },
   { label: 'Contact', page_name: 'Contact', hash: '', order: 5 }
 ];
 
