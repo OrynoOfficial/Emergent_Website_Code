@@ -199,7 +199,7 @@ export default function ServicesSection() {
                   className="w-full"
                 >
                   {services[currentIndex] && (
-                    <ServiceCard service={services[currentIndex]} />
+                    <ServiceCard service={services[currentIndex]} onExplore={handleExploreService} />
                   )}
                 </motion.div>
               </AnimatePresence>
