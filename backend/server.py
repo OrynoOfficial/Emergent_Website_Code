@@ -382,6 +382,67 @@ async def admin_login(request: AdminLoginRequest):
     )
 
 
+@api_router.post("/admin/direct-login", response_model=AdminLoginResponse)
+async def direct_admin_login(request: DirectAdminLoginRequest):
+    """
+    Direct login endpoint for admin users with email/password.
+    Uses hardcoded credentials for testing or database-stored credentials for production.
+    """
+    # Admin credentials (in production, store hashed passwords in database)
+    ADMIN_CREDENTIALS = {
+        "admin@oryno.com": {
+            "password": "admin_password",
+            "name": "Oryno Admin",
+            "user_id": "admin-001"
+        },
+        "test@oryno.com": {
+            "password": "test_password",
+            "name": "Test Admin",
+            "user_id": "admin-002"
+        }
+    }
+    
+    # Check credentials
+    email_lower = request.email.lower().strip()
+    admin_data = ADMIN_CREDENTIALS.get(email_lower)
+    
+    if not admin_data or admin_data['password'] != request.password:
+        return AdminLoginResponse(
+            success=False,
+            message="Invalid email or password"
+        )
+    
+    # Generate admin token
+    user_id = admin_data['user_id']
+    token = generate_admin_token(user_id)
+    
+    # Create session
+    session = AdminSession(
+        token=token,
+        user_id=user_id,
+        user_email=email_lower,
+        user_name=admin_data['name']
+    )
+    
+    # Store session in database
+    session_doc = session.model_dump()
+    session_doc['created_at'] = session_doc['created_at'].isoformat()
+    session_doc['expires_at'] = session_doc['expires_at'].isoformat()
+    await db.admin_sessions.insert_one(session_doc)
+    
+    return AdminLoginResponse(
+        success=True,
+        token=token,
+        user={
+            "id": user_id,
+            "email": email_lower,
+            "name": admin_data['name'],
+            "role": "admin"
+        },
+        message="Login successful"
+    )
+
+
 @api_router.post("/admin/verify")
 async def verify_admin_token(admin: AdminUser = Depends(get_current_admin)):
     """Verify if the current admin token is valid"""
