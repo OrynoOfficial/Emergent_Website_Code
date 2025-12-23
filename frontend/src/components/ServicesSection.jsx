@@ -244,7 +244,7 @@ export default function ServicesSection() {
           {/* Desktop Grid */}
           <div className="lg:col-span-2 hidden sm:grid sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
             {services.slice(0, 6).map((service) => (
-              <ServiceCard key={service.id} service={service} />
+              <ServiceCard key={service.id} service={service} onExplore={handleExploreService} />
             ))}
           </div>
         </div>
@@ -253,7 +253,7 @@ export default function ServicesSection() {
         {services.length > 6 && (
           <div className="hidden sm:grid sm:grid-cols-3 gap-4 sm:gap-6 mt-6">
             {services.slice(6).map((service) => (
-              <ServiceCard key={service.id} service={service} />
+              <ServiceCard key={service.id} service={service} onExplore={handleExploreService} />
             ))}
           </div>
         )}
