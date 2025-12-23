@@ -1,8 +1,24 @@
 import React, { useState, useEffect } from 'react';
 import { fetchStats } from '@/api/publicApi';
-import { Hotel, MapPin, Car, Calendar, Building, Users, Loader2 } from 'lucide-react';
+import { Hotel, MapPin, Car, Calendar, Building, Users, Loader2, Star, Clock } from 'lucide-react';
 import { motion } from 'framer-motion';
-import { formatNumber } from '@/utils';
+
+// Helper function to format numbers with K/M suffixes or handle string values
+const formatStatValue = (value) => {
+  if (typeof value === 'string') {
+    return value;
+  }
+  if (typeof value === 'number') {
+    if (value >= 1000000) {
+      return (value / 1000000).toFixed(1) + 'M';
+    }
+    if (value >= 1000) {
+      return (value / 1000).toFixed(1) + 'K';
+    }
+    return value.toLocaleString();
+  }
+  return '0';
+};
 
 export default function StatsSection() {
   const [stats, setStats] = useState(null);
@@ -36,41 +52,42 @@ export default function StatsSection() {
     return null;
   }
 
+  // Support both API format and fallback format
   const statItems = [
     { 
-      value: stats.total_hotels || 0, 
-      label: 'Hotels', 
+      value: stats.totalBookings || stats.total_hotels || '50,000+', 
+      label: 'Total Bookings', 
       icon: Hotel,
       color: 'from-blue-400 to-blue-600'
     },
     { 
-      value: stats.total_routes || 0, 
-      label: 'Travel Routes', 
-      icon: MapPin,
+      value: stats.activeUsers || stats.total_routes || '25,000+', 
+      label: 'Active Users', 
+      icon: Users,
       color: 'from-green-400 to-green-600'
     },
     { 
-      value: stats.total_vehicles || 0, 
-      label: 'Vehicles', 
-      icon: Car,
+      value: stats.citiesCovered || stats.cities_covered || '8', 
+      label: 'Cities Covered', 
+      icon: MapPin,
       color: 'from-orange-400 to-orange-600'
     },
     { 
-      value: stats.total_events || 0, 
-      label: 'Events', 
-      icon: Calendar,
+      value: stats.partnerAgencies || stats.total_events || '120+', 
+      label: 'Partner Agencies', 
+      icon: Building,
       color: 'from-purple-400 to-purple-600'
     },
     { 
-      value: stats.cities_covered || 0, 
-      label: 'Cities Covered', 
-      icon: Building,
+      value: stats.customerSatisfaction || '98%', 
+      label: 'Satisfaction Rate', 
+      icon: Star,
       color: 'from-pink-400 to-pink-600'
     },
     { 
-      value: stats.happy_customers || 0, 
-      label: 'Happy Customers', 
-      icon: Users,
+      value: stats.yearsOfService || stats.happy_customers || '5+', 
+      label: 'Years of Service', 
+      icon: Clock,
       color: 'from-yellow-400 to-yellow-600'
     }
   ];
@@ -109,7 +126,7 @@ export default function StatsSection() {
                   <stat.icon className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
                 </div>
                 <div className="text-2xl sm:text-3xl font-bold text-white mb-1">
-                  {formatNumber(stat.value)}
+                  {formatStatValue(stat.value)}
                 </div>
                 <div className="text-white/70 text-xs sm:text-sm font-medium">
                   {stat.label}
