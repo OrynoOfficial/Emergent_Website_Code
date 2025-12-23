@@ -2,9 +2,10 @@ import React, { useState } from 'react';
 import { Link, useLocation, Outlet } from 'react-router-dom';
 import { 
   LayoutDashboard, FileText, Users, Briefcase, Settings, 
-  LogOut, Menu, X, ChevronDown, Bell, Package
+  LogOut, Menu, X, ChevronDown, Bell, Package, User
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { useAdminAuth } from '@/api/adminAuth';
 
 const navItems = [
   { label: 'Dashboard', icon: LayoutDashboard, path: '/admin' },
@@ -17,7 +18,14 @@ const navItems = [
 
 export default function AdminLayout({ children }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [showUserMenu, setShowUserMenu] = useState(false);
   const location = useLocation();
+  const { user, logout, isAuthenticated } = useAdminAuth();
+
+  const getUserInitials = () => {
+    if (!user?.name) return 'A';
+    return user.name.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase();
+  };
 
   return (
     <div className="min-h-screen bg-gray-100">
@@ -69,14 +77,23 @@ export default function AdminLayout({ children }) {
         </div>
 
         {/* Bottom Links */}
-        <div className="absolute bottom-0 left-0 right-0 p-6 border-t border-white/10">
+        <div className="absolute bottom-0 left-0 right-0 p-6 border-t border-white/10 space-y-2">
           <Link
             to="/"
             className="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-white/80 hover:bg-white/10 transition-colors"
           >
-            <LogOut className="w-5 h-5" />
+            <Package className="w-5 h-5" />
             Back to Website
           </Link>
+          {isAuthenticated && (
+            <button
+              onClick={logout}
+              className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-red-300 hover:bg-red-500/20 transition-colors"
+            >
+              <LogOut className="w-5 h-5" />
+              Logout
+            </button>
+          )}
         </div>
       </aside>
 
@@ -97,11 +114,55 @@ export default function AdminLayout({ children }) {
                 <Bell className="w-5 h-5 text-gray-600" />
                 <span className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full"></span>
               </button>
-              <div className="flex items-center gap-2">
-                <div className="w-8 h-8 bg-[#082c59] rounded-full flex items-center justify-center">
-                  <span className="text-white text-sm font-bold">A</span>
-                </div>
-                <span className="text-sm font-medium text-gray-700 hidden sm:block">Admin</span>
+              
+              {/* User Menu */}
+              <div className="relative">
+                <button 
+                  onClick={() => setShowUserMenu(!showUserMenu)}
+                  className="flex items-center gap-2 p-2 rounded-lg hover:bg-gray-100"
+                >
+                  <div className="w-8 h-8 bg-gradient-to-br from-[#082c59] to-[#0a3d7a] rounded-full flex items-center justify-center">
+                    <span className="text-white text-xs font-bold">{getUserInitials()}</span>
+                  </div>
+                  <div className="hidden sm:block text-left">
+                    <span className="text-sm font-medium text-gray-700 block">{user?.name || 'Admin'}</span>
+                    <span className="text-xs text-gray-500">{user?.role || 'Administrator'}</span>
+                  </div>
+                  <ChevronDown className="w-4 h-4 text-gray-400 hidden sm:block" />
+                </button>
+
+                {showUserMenu && (
+                  <>
+                    <div 
+                      className="fixed inset-0 z-10" 
+                      onClick={() => setShowUserMenu(false)}
+                    />
+                    <div className="absolute right-0 mt-2 w-48 bg-white rounded-xl shadow-lg border border-gray-100 py-2 z-20">
+                      <div className="px-4 py-2 border-b border-gray-100">
+                        <p className="text-sm font-medium text-gray-900">{user?.name}</p>
+                        <p className="text-xs text-gray-500">{user?.email}</p>
+                      </div>
+                      <Link
+                        to="/admin/settings"
+                        onClick={() => setShowUserMenu(false)}
+                        className="flex items-center gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50"
+                      >
+                        <Settings className="w-4 h-4" />
+                        Settings
+                      </Link>
+                      <button
+                        onClick={() => {
+                          setShowUserMenu(false);
+                          logout();
+                        }}
+                        className="w-full flex items-center gap-2 px-4 py-2 text-sm text-red-600 hover:bg-red-50"
+                      >
+                        <LogOut className="w-4 h-4" />
+                        Logout
+                      </button>
+                    </div>
+                  </>
+                )}
               </div>
             </div>
           </div>
