@@ -35,13 +35,17 @@ export default function OrynoMarketingCarousel({ slides = defaultSlides }) {
   const [progress, setProgress] = useState(0);
   const progressInterval = useRef(null);
 
+  // Reset progress when slide changes
+  useEffect(() => {
+    setProgress(0);
+  }, [currentIndex]);
+
   useEffect(() => {
     if (!isAutoPlaying || slides.length === 0) {
       clearInterval(progressInterval.current);
       return;
     }
 
-    setProgress(0);
     const duration = 4000; // 4 seconds per slide
     const intervalTime = 50; // Update progress every 50ms
     const increment = (intervalTime / duration) * 100;
@@ -57,7 +61,7 @@ export default function OrynoMarketingCarousel({ slides = defaultSlides }) {
     }, intervalTime);
 
     return () => clearInterval(progressInterval.current);
-  }, [isAutoPlaying, slides.length, currentIndex]);
+  }, [isAutoPlaying, slides.length]);
 
   const goToPrevious = () => {
     setCurrentIndex((prev) => (prev - 1 + slides.length) % slides.length);
