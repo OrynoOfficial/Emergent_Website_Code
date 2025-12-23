@@ -70,12 +70,33 @@ export default function FeaturedHotels() {
 
   if (hotels.length === 0) return null;
 
-  const HotelCard = ({ hotel, featured = false }) => (
+  const HotelCard = ({ hotel, featured = false }) => {
+    // Handle both API format and fallback format
+    const location = hotel.location || `${hotel.city || ''}${hotel.city && hotel.country ? ', ' : ''}${hotel.country || ''}`;
+    const price = hotel.price || hotel.price_per_night;
+    const rating = hotel.rating || hotel.average_rating || 4.5;
+    const amenities = hotel.amenities || [];
+    
+    return (
     <div className={`bg-white rounded-2xl shadow-lg overflow-hidden border border-gray-100 hover:shadow-xl transition-all duration-300 ${featured ? 'lg:col-span-2 lg:row-span-2' : ''}`}>
       <div className={`relative ${featured ? 'h-48 sm:h-64' : 'h-40'}`}>
-        <div className="absolute inset-0 bg-gradient-to-br from-[#082c59] to-[#0a3d7a] flex items-center justify-center">
-          <span className="text-6xl">🏨</span>
-        </div>
+        {hotel.image ? (
+          <img 
+            src={hotel.image} 
+            alt={hotel.name} 
+            className="w-full h-full object-cover"
+            onError={(e) => {
+              e.target.onerror = null;
+              e.target.style.display = 'none';
+              e.target.parentElement.classList.add('bg-gradient-to-br', 'from-[#082c59]', 'to-[#0a3d7a]');
+            }}
+          />
+        ) : (
+          <div className="absolute inset-0 bg-gradient-to-br from-[#082c59] to-[#0a3d7a] flex items-center justify-center">
+            <span className="text-6xl">🏨</span>
+          </div>
+        )}
+        <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent" />
         <div className="absolute top-3 left-3">
           <div className="flex items-center gap-1 bg-white/90 backdrop-blur-sm rounded-full px-2 py-1">
             {[...Array(hotel.star_rating || 4)].map((_, i) => (
@@ -86,35 +107,40 @@ export default function FeaturedHotels() {
         <div className="absolute top-3 right-3">
           <div className="flex items-center gap-1 bg-green-500 text-white rounded-full px-2 py-1 text-xs font-semibold">
             <Star className="w-3 h-3 fill-white" />
-            {hotel.average_rating?.toFixed(1) || '4.5'}
+            {typeof rating === 'number' ? rating.toFixed(1) : rating}
           </div>
         </div>
       </div>
       <div className="p-4 sm:p-5">
         <h3 className={`font-bold text-gray-900 mb-2 ${featured ? 'text-xl' : 'text-lg'}`}>{hotel.name}</h3>
-        <div className="flex items-center gap-1 text-gray-500 text-sm mb-3">
-          <MapPin className="w-4 h-4" />
-          <span>{hotel.city}, {hotel.country}</span>
-        </div>
+        {location && (
+          <div className="flex items-center gap-1 text-gray-500 text-sm mb-3">
+            <MapPin className="w-4 h-4" />
+            <span>{location}</span>
+          </div>
+        )}
         
         {/* Amenities */}
-        <div className="flex flex-wrap gap-2 mb-4">
-          {hotel.amenities?.slice(0, 4).map((amenity) => {
-            const Icon = amenityIcons[amenity];
-            return Icon ? (
-              <div key={amenity} className="flex items-center gap-1 bg-gray-100 rounded-full px-2 py-1 text-xs text-gray-600">
-                {typeof Icon === 'function' ? <Icon /> : <Icon className="w-3 h-3" />}
-                <span className="capitalize">{amenity.replace('_', ' ')}</span>
-              </div>
-            ) : null;
-          })}
-        </div>
+        {amenities.length > 0 && (
+          <div className="flex flex-wrap gap-2 mb-4">
+            {amenities.slice(0, 4).map((amenity, idx) => {
+              const amenityKey = typeof amenity === 'string' ? amenity.toLowerCase() : '';
+              const Icon = amenityIcons[amenityKey];
+              return (
+                <div key={idx} className="flex items-center gap-1 bg-gray-100 rounded-full px-2 py-1 text-xs text-gray-600">
+                  {Icon ? (typeof Icon === 'function' ? <Icon /> : <Icon className="w-3 h-3" />) : null}
+                  <span className="capitalize">{amenity.replace('_', ' ')}</span>
+                </div>
+              );
+            })}
+          </div>
+        )}
 
         <div className="flex items-center justify-between">
           <div>
             <span className="text-xs text-gray-500">From</span>
             <div className="text-xl font-bold text-[#082c59]">
-              {formatCurrency(hotel.price_per_night)}
+              {formatCurrency(price)}
               <span className="text-xs font-normal text-gray-500">/night</span>
             </div>
           </div>
@@ -128,6 +154,7 @@ export default function FeaturedHotels() {
       </div>
     </div>
   );
+  };
 
   return (
     <div id="hotels" className="bg-gray-50 py-12 sm:py-24 scroll-mt-24">
