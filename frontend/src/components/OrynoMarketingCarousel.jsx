@@ -34,11 +34,7 @@ export default function OrynoMarketingCarousel({ slides = defaultSlides }) {
   const [isAutoPlaying, setIsAutoPlaying] = useState(true);
   const [progress, setProgress] = useState(0);
   const progressInterval = useRef(null);
-
-  // Reset progress when slide changes
-  useEffect(() => {
-    setProgress(0);
-  }, [currentIndex]);
+  const lastIndexRef = useRef(currentIndex);
 
   useEffect(() => {
     if (!isAutoPlaying || slides.length === 0) {
@@ -52,8 +48,16 @@ export default function OrynoMarketingCarousel({ slides = defaultSlides }) {
 
     progressInterval.current = setInterval(() => {
       setProgress(prev => {
+        // Check if index changed (from navigation buttons)
+        if (lastIndexRef.current !== currentIndex) {
+          lastIndexRef.current = currentIndex;
+          return 0;
+        }
         if (prev >= 100) {
-          setCurrentIndex(current => (current + 1) % slides.length);
+          setCurrentIndex(current => {
+            lastIndexRef.current = (current + 1) % slides.length;
+            return (current + 1) % slides.length;
+          });
           return 0;
         }
         return prev + increment;
@@ -61,21 +65,18 @@ export default function OrynoMarketingCarousel({ slides = defaultSlides }) {
     }, intervalTime);
 
     return () => clearInterval(progressInterval.current);
-  }, [isAutoPlaying, slides.length]);
+  }, [isAutoPlaying, slides.length, currentIndex]);
 
   const goToPrevious = () => {
     setCurrentIndex((prev) => (prev - 1 + slides.length) % slides.length);
-    setProgress(0);
   };
 
   const goToNext = () => {
     setCurrentIndex((prev) => (prev + 1) % slides.length);
-    setProgress(0);
   };
 
   const goToSlide = (index) => {
     setCurrentIndex(index);
-    setProgress(0);
   };
 
   if (slides.length === 0) {
