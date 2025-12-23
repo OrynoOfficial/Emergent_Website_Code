@@ -17,6 +17,9 @@ import FaqSection from '@/components/FaqSection';
 import AnalyticsSection from '@/components/AnalyticsSection';
 import ContainerMessage from '@/components/ContainerMessage';
 import ChatbotWidget from '@/components/ChatbotWidget';
+import OrynoMarketingCarousel from '@/components/OrynoMarketingCarousel';
+import OrynoServiceNetwork from '@/components/OrynoServiceNetwork';
+import TransportModes from '@/components/TransportModes';
 
 export default function Home() {
   useEffect(() => {
