@@ -59,6 +59,10 @@ class AdminLoginRequest(BaseModel):
     user_name: str
     webapp_token: str  # Token from the webapp to verify the user
 
+class DirectAdminLoginRequest(BaseModel):
+    email: str
+    password: str
+
 class AdminLoginResponse(BaseModel):
     success: bool
     token: Optional[str] = None
