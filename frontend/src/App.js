@@ -60,6 +60,7 @@ function App() {
             <Route path="/admin" element={<AdminLayout />}>
               <Route index element={<AdminDashboard />} />
               <Route path="content" element={<ContentManager />} />
+              <Route path="team" element={<TeamManager />} />
               <Route path="blog" element={<BlogManager />} />
               <Route path="applications" element={<ApplicationsManager />} />
               <Route path="settings" element={<AdminSettings />} />
