@@ -1,13 +1,13 @@
 import axios from 'axios';
 
 // Oryno Webapp Public API Base URL
-const WEBAPP_API_BASE = 'https://modernstack-2.preview.emergentagent.com/api';
+const WEBAPP_API_BASE = 'https://transport-hub-71.preview.emergentagent.com/api';
 
 // Webapp Auth URLs for redirects
 export const WEBAPP_URLS = {
-  login: 'https://modernstack-2.preview.emergentagent.com/login',
-  register: 'https://modernstack-2.preview.emergentagent.com/register',
-  base: 'https://modernstack-2.preview.emergentagent.com'
+  login: 'https://transport-hub-71.preview.emergentagent.com/login',
+  register: 'https://transport-hub-71.preview.emergentagent.com/register',
+  base: 'https://transport-hub-71.preview.emergentagent.com'
 };
 
 // Create axios instance for public API
