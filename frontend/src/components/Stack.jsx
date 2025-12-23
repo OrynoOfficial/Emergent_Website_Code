@@ -51,7 +51,8 @@ export default function Stack({
       }}
     >
       {cards.map((card, index) => {
-        const randomRotate = randomRotation ? Math.random() * 10 - 5 : 0;
+        const cardIndex = cardsData.findIndex(c => c.id === card.id);
+        const randomRotate = randomRotations[cardIndex >= 0 ? cardIndex : index] || 0;
         const rotation = (cards.length - index - 1) * 4 + randomRotate;
         const scale = 1 + index * 0.06 - cards.length * 0.06;
 
