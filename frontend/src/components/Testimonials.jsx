@@ -64,6 +64,16 @@ export default function Testimonials() {
   if (testimonials.length === 0) return null;
 
   const currentTestimonial = testimonials[currentIndex];
+  
+  // Handle both API format and fallback format
+  const getTestimonialData = (testimonial) => ({
+    name: testimonial.name || testimonial.user_name || 'Anonymous',
+    comment: testimonial.comment || testimonial.text || '',
+    rating: testimonial.rating || 5,
+    city: testimonial.city || testimonial.location || '',
+    service: testimonial.service || testimonial.service_used || '',
+    avatar: testimonial.avatar || testimonial.image || null
+  });
 
   return (
     <div className="bg-gray-50 py-12 sm:py-24">
@@ -86,7 +96,9 @@ export default function Testimonials() {
         <div className="max-w-3xl mx-auto">
           <div className="relative">
             <AnimatePresence mode="wait">
-              {currentTestimonial && (
+              {currentTestimonial && (() => {
+                const data = getTestimonialData(currentTestimonial);
+                return (
                 <motion.div
                   key={currentIndex}
                   initial={{ opacity: 0, x: 100 }}
@@ -106,7 +118,7 @@ export default function Testimonials() {
                       <Star
                         key={i}
                         className={`w-5 h-5 sm:w-6 sm:h-6 ${
-                          i < currentTestimonial.rating
+                          i < data.rating
                             ? 'fill-yellow-400 text-yellow-400'
                             : 'fill-gray-200 text-gray-200'
                         }`}
@@ -116,22 +128,34 @@ export default function Testimonials() {
 
                   {/* Quote */}
                   <p className="text-gray-700 text-center text-lg sm:text-xl leading-relaxed mb-8">
-                    "{currentTestimonial.comment}"
+                    "{data.comment}"
                   </p>
 
                   {/* Author */}
                   <div className="text-center">
-                    <div className="w-16 h-16 mx-auto bg-gradient-to-br from-[#082c59] to-[#0a3d7a] rounded-full flex items-center justify-center mb-3">
-                      <span className="text-white text-2xl font-bold">
-                        {currentTestimonial.name?.charAt(0) || 'U'}
-                      </span>
-                    </div>
-                    <h4 className="font-bold text-gray-900 text-lg">{currentTestimonial.name}</h4>
-                    <p className="text-gray-500 text-sm">{currentTestimonial.city}</p>
-                    <p className="text-[#082c59] text-xs font-medium mt-1">{currentTestimonial.service}</p>
+                    {data.avatar ? (
+                      <img 
+                        src={data.avatar} 
+                        alt={data.name}
+                        className="w-16 h-16 mx-auto rounded-full object-cover mb-3"
+                        onError={(e) => {
+                          e.target.onerror = null;
+                          e.target.style.display = 'none';
+                        }}
+                      />
+                    ) : (
+                      <div className="w-16 h-16 mx-auto bg-gradient-to-br from-[#082c59] to-[#0a3d7a] rounded-full flex items-center justify-center mb-3">
+                        <span className="text-white text-2xl font-bold">
+                          {data.name?.charAt(0) || 'U'}
+                        </span>
+                      </div>
+                    )}
+                    <h4 className="font-bold text-gray-900 text-lg">{data.name}</h4>
+                    {data.city && <p className="text-gray-500 text-sm">{data.city}</p>}
+                    {data.service && <p className="text-[#082c59] text-xs font-medium mt-1">{data.service}</p>}
                   </div>
                 </motion.div>
-              )}
+              )})()}
             </AnimatePresence>
 
             {/* Navigation Arrows */}
