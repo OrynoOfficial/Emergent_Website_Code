@@ -46,7 +46,7 @@ export default function AboutSection() {
             <p className="text-gray-600 text-base leading-relaxed">
               Founded with a vision to transform how Africans access essential services, 
               Oryno brings together travel, hospitality, logistics, and lifestyle services 
-              under one unified platform. We're committed to making your daily life easier 
+              under one unified platform. We&apos;re committed to making your daily life easier 
               through technology and exceptional service.
             </p>
             
