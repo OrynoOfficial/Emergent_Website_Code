@@ -128,7 +128,7 @@ export default function Testimonials() {
 
                   {/* Quote */}
                   <p className="text-gray-700 text-center text-lg sm:text-xl leading-relaxed mb-8">
-                    "{data.comment}"
+                    &ldquo;{data.comment}&rdquo;
                   </p>
 
                   {/* Author */}
