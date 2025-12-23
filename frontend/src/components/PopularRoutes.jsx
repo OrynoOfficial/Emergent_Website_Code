@@ -60,7 +60,16 @@ export default function PopularRoutes() {
 
         {/* Routes Grid */}
         <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
-          {routes.map((route, index) => (
+          {routes.map((route, index) => {
+            // Handle both API format and fallback format
+            const fromCity = route.from_city || route.from || '';
+            const toCity = route.to_city || route.to || '';
+            const price = route.min_price || route.price || 0;
+            const operatorsCount = route.operators_count || 5;
+            const distance = route.distance || '';
+            const duration = route.duration || '';
+            
+            return (
             <motion.div
               key={index}
               initial={{ opacity: 0, y: 20 }}
@@ -76,7 +85,7 @@ export default function PopularRoutes() {
                     <div className="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center">
                       <MapPin className="w-4 h-4" />
                     </div>
-                    <span className="font-semibold text-sm">{route.from_city}</span>
+                    <span className="font-semibold text-sm">{fromCity}</span>
                   </div>
                   <div className="flex-1 mx-3 border-t-2 border-dashed border-white/40 relative">
                     <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white/20 rounded-full p-1">
@@ -84,7 +93,7 @@ export default function PopularRoutes() {
                     </div>
                   </div>
                   <div className="flex items-center gap-2">
-                    <span className="font-semibold text-sm">{route.to_city}</span>
+                    <span className="font-semibold text-sm">{toCity}</span>
                     <div className="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center">
                       <MapPin className="w-4 h-4" />
                     </div>
@@ -97,16 +106,20 @@ export default function PopularRoutes() {
                 <div className="flex items-center justify-between mb-3">
                   <div className="flex items-center gap-1 text-gray-500 text-xs">
                     <Users className="w-4 h-4" />
-                    <span>{route.operators_count} operators</span>
+                    <span>{operatorsCount} operators</span>
                   </div>
-                  <div className="text-xs text-gray-500">Multiple departures</div>
+                  {duration ? (
+                    <div className="text-xs text-gray-500">{duration}</div>
+                  ) : (
+                    <div className="text-xs text-gray-500">Multiple departures</div>
+                  )}
                 </div>
 
                 <div className="flex items-center justify-between">
                   <div>
                     <span className="text-xs text-gray-500">From</span>
                     <div className="text-lg font-bold text-[#082c59]">
-                      {formatCurrency(route.min_price)}
+                      {formatCurrency(price)}
                     </div>
                   </div>
                   <Button
@@ -120,7 +133,7 @@ export default function PopularRoutes() {
                 </div>
               </div>
             </motion.div>
-          ))}
+          )})}
         </div>
 
         {/* View All Button */}
