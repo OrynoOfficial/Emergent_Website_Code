@@ -158,7 +158,7 @@ export default function Departments() {
             Departments & Teams
           </h1>
           <p className="text-white/80 text-lg max-w-2xl mx-auto">
-            Discover the teams that power Oryno's innovative platform
+            Discover the teams that power Oryno&apos;s innovative platform
           </p>
         </div>
       </div>
