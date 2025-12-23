@@ -16,68 +16,15 @@ const amenityIcons = {
   room_service: () => <span className="text-xs">🛍️</span>
 };
 
-export default function FeaturedHotels() {
-  const [hotels, setHotels] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const autoPlayRef = useRef(null);
-
-  useEffect(() => {
-    const loadHotels = async () => {
-      try {
-        const data = await fetchFeaturedHotels();
-        setHotels(data);
-      } catch (error) {
-        console.error('Error loading hotels:', error);
-      } finally {
-        setLoading(false);
-      }
-    };
-    loadHotels();
-  }, []);
-
-  // Auto-play for carousel
-  useEffect(() => {
-    if (hotels.length > 0) {
-      autoPlayRef.current = setInterval(() => {
-        setCurrentIndex((prev) => (prev + 1) % hotels.length);
-      }, 5000);
-      return () => clearInterval(autoPlayRef.current);
-    }
-  }, [hotels.length]);
-
-  const resetAutoPlay = () => {
-    if (autoPlayRef.current) clearInterval(autoPlayRef.current);
-    autoPlayRef.current = setInterval(() => {
-      setCurrentIndex((prev) => (prev + 1) % hotels.length);
-    }, 5000);
-  };
-
-  const handleBookNow = () => {
-    window.location.href = WEBAPP_URLS.base;
-  };
-
-  if (loading) {
-    return (
-      <div id="hotels" className="bg-white py-12 sm:py-24 scroll-mt-24">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <Loader2 className="w-12 h-12 text-[#082c59] animate-spin mx-auto" />
-          <p className="text-gray-500 mt-4">Loading featured hotels...</p>
-        </div>
-      </div>
-    );
-  }
-
-  if (hotels.length === 0) return null;
-
-  const HotelCard = ({ hotel, featured = false }) => {
-    // Handle both API format and fallback format
-    const location = hotel.location || `${hotel.city || ''}${hotel.city && hotel.country ? ', ' : ''}${hotel.country || ''}`;
-    const price = hotel.price || hotel.price_per_night;
-    const rating = hotel.rating || hotel.average_rating || 4.5;
-    const amenities = hotel.amenities || [];
-    
-    return (
+// Moved outside the parent component to avoid re-creation on render
+function HotelCard({ hotel, featured = false, onBookNow }) {
+  // Handle both API format and fallback format
+  const location = hotel.location || `${hotel.city || ''}${hotel.city && hotel.country ? ', ' : ''}${hotel.country || ''}`;
+  const price = hotel.price || hotel.price_per_night;
+  const rating = hotel.rating || hotel.average_rating || 4.5;
+  const amenities = hotel.amenities || [];
+  
+  return (
     <div className={`bg-white rounded-2xl shadow-lg overflow-hidden border border-gray-100 hover:shadow-xl transition-all duration-300 ${featured ? 'lg:col-span-2 lg:row-span-2' : ''}`}>
       <div className={`relative ${featured ? 'h-48 sm:h-64' : 'h-40'}`}>
         {hotel.image ? (
@@ -145,7 +92,7 @@ export default function FeaturedHotels() {
             </div>
           </div>
           <Button 
-            onClick={handleBookNow}
+            onClick={onBookNow}
             className="bg-[#082c59] hover:bg-[#0a3d7a] text-white text-xs px-4 py-2"
           >
             Book Now
@@ -154,7 +101,61 @@ export default function FeaturedHotels() {
       </div>
     </div>
   );
+}
+
+export default function FeaturedHotels() {
+  const [hotels, setHotels] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const autoPlayRef = useRef(null);
+
+  useEffect(() => {
+    const loadHotels = async () => {
+      try {
+        const data = await fetchFeaturedHotels();
+        setHotels(data);
+      } catch (error) {
+        console.error('Error loading hotels:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    loadHotels();
+  }, []);
+
+  // Auto-play for carousel
+  useEffect(() => {
+    if (hotels.length > 0) {
+      autoPlayRef.current = setInterval(() => {
+        setCurrentIndex((prev) => (prev + 1) % hotels.length);
+      }, 5000);
+      return () => clearInterval(autoPlayRef.current);
+    }
+  }, [hotels.length]);
+
+  const resetAutoPlay = () => {
+    if (autoPlayRef.current) clearInterval(autoPlayRef.current);
+    autoPlayRef.current = setInterval(() => {
+      setCurrentIndex((prev) => (prev + 1) % hotels.length);
+    }, 5000);
   };
+
+  const handleBookNow = () => {
+    window.location.href = WEBAPP_URLS.base;
+  };
+
+  if (loading) {
+    return (
+      <div id="hotels" className="bg-white py-12 sm:py-24 scroll-mt-24">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <Loader2 className="w-12 h-12 text-[#082c59] animate-spin mx-auto" />
+          <p className="text-gray-500 mt-4">Loading featured hotels...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (hotels.length === 0) return null;
 
   return (
     <div id="hotels" className="bg-gray-50 py-12 sm:py-24 scroll-mt-24">
@@ -192,7 +193,7 @@ export default function FeaturedHotels() {
               exit={{ x: -100, opacity: 0 }}
               transition={{ type: "spring", stiffness: 300, damping: 30 }}
             >
-              <HotelCard hotel={hotels[currentIndex]} />
+              <HotelCard hotel={hotels[currentIndex]} onBookNow={handleBookNow} />
             </motion.div>
           </AnimatePresence>
           
@@ -225,7 +226,7 @@ export default function FeaturedHotels() {
         {/* Desktop Grid */}
         <div className="hidden sm:grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {hotels.map((hotel, index) => (
-            <HotelCard key={index} hotel={hotel} featured={index === 0} />
+            <HotelCard key={index} hotel={hotel} featured={index === 0} onBookNow={handleBookNow} />
           ))}
         </div>
       </div>
